@@ -1,1 +1,28 @@
 @import "tailwindcss";
+@import "flowbite/src/themes/default";
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-accent-50: #f0f8ff;
+  --color-accent-100: #dff0ff;
+  --color-accent-200: #b8e1ff;
+  --color-accent-300: #6ec6ff; // Main Color
+  --color-accent-400: #33b1fd;
+  --color-accent-500: #0997ee;
+  --color-accent-600: #0077cc;
+  --color-accent-700: #005ea5;
+  --color-accent-800: #045188;
+  --color-accent-900: #0a4470;
+  --color-accent-950: #062a4b;
+
+  --color-primary-light: #F2F4F5;
+  --color-toolbar-light: #F5F5F5;
+  --color-muted-light: #0000000D; // Used for border
+
+  --color-primary-dark: #121214;
+  --color-toolbar-dark: #1f1f1f;
+  --color-muted-dark: #211f2d; // Used for border
+}

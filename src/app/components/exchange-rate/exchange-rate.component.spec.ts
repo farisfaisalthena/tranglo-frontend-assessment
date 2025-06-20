@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FooterComponent } from './footer.component';
+import { ExchangeRateComponent } from './exchange-rate.component';
 
-describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
+describe('ExchangeRateComponent', () => {
+  let component: ExchangeRateComponent;
+  let fixture: ComponentFixture<ExchangeRateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FooterComponent]
+      imports: [ExchangeRateComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(ExchangeRateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
