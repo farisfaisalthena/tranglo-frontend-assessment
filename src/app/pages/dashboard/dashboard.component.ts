@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NgClass } from '@angular/common';
 
 import { NgIcon } from '@ng-icons/core';
 
@@ -8,12 +9,33 @@ import { SummaryCardComponent } from '../../components';
   selector: 'app-dashboard',
   imports: [
     NgIcon,
-    SummaryCardComponent
+    SummaryCardComponent,
+    NgClass
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
+
+  viewOpts = [
+    {
+      name: 'Exchange Rates',
+      value: 'rates',
+      icon: 'heroBanknotes'
+    },
+    {
+      name: 'History Trends',
+      value: 'trends',
+      icon: 'heroArrowTrendingUp'
+    },
+    {
+      name: 'Currency Converter',
+      value: 'converter',
+      icon: 'heroCalculator'
+    }
+  ];
+  selectedView: string = this.viewOpts[0].value;
+  autoRefresh: boolean = true;
 
   baseCurrencyOpts = [
     { code: 'USD', name: 'US Dollar', symbol: '$' },

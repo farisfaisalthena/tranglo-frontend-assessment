@@ -9,8 +9,14 @@ import {
   heroGlobeAmericasSolid,
   heroArrowTrendingUpSolid,
   heroBanknotesSolid,
-  heroClockSolid
+  heroClockSolid,
+  heroArrowPathSolid
 } from '@ng-icons/heroicons/solid';
+import {
+  heroArrowTrendingUp,
+  heroBanknotes,
+  heroCalculator
+} from '@ng-icons/heroicons/outline';
 
 import { routes } from './app.routes';
 
@@ -25,7 +31,11 @@ export const appConfig: ApplicationConfig = {
       heroGlobeAmericasSolid,
       heroArrowTrendingUpSolid,
       heroBanknotesSolid,
-      heroClockSolid
+      heroClockSolid,
+      heroBanknotes,
+      heroArrowTrendingUp,
+      heroCalculator,
+      heroArrowPathSolid
     })
   ]
 };
