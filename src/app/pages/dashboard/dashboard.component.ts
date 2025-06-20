@@ -1,35 +1,20 @@
 import { Component } from '@angular/core';
 
+import { NgIcon } from '@ng-icons/core';
+
+import { SummaryCardComponent } from '../../components';
+
 @Component({
   selector: 'app-dashboard',
-  imports: [],
+  imports: [
+    NgIcon,
+    SummaryCardComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
 
-  summaryCards = [
-    {
-      title: 'Total Currencies',
-      value: '20',
-      icon: '/icons/globe-americas-solid.svg'
-    },
-    {
-      title: 'Positive Changes',
-      value: '5',
-      icon: '/icons/arrow-trending-up.svg'
-    },
-    {
-      title: 'Base Currency',
-      value: 'USD',
-      icon: '/icons/banknotes-solid.svg'
-    },
-    {
-      title: 'Last Updated',
-      value: '10 minutes ago',
-      icon: '/icons/clock-solid.svg'
-    }
-  ];
   baseCurrencyOpts = [
     { code: 'USD', name: 'US Dollar', symbol: '$' },
     { code: 'EUR', name: 'Euro', symbol: '€' },

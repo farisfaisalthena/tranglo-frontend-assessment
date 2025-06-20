@@ -1,0 +1,19 @@
+<div
+  class="rounded-xl text-card-foreground shadow-sm p-6 bg-gradient-to-r"
+  [ngClass]="cardBackgroundColor()">
+  <div class="flex items-center justify-between">
+    <div>
+      <p class="text-sm font-medium text-white">
+        {{ textTitle() }}
+      </p>
+
+      <p class="text-xl font-bold text-white">
+        {{ textDescription() }}
+      </p>
+    </div>
+
+    <div class="p-3 rounded-full bg-opacity-40 flex" [ngClass]="[iconBackgroundColor(), iconTextColor()]">
+      <ng-icon [name]="iconName()" size="24"></ng-icon>
+    </div>
+  </div>
+</div>

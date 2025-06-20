@@ -1,26 +1,20 @@
 <div class="space-y-6">
-  <!-- TODO: Redesign this. Just mockup for now -->
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-    @for (s of summaryCards; track $index) {
-    <div
-      class="rounded-lg border text-card-foreground shadow-sm p-6 backdrop-blur-sm transition-all duration-300 bg-white/70 border-gray-200/50 hover:bg-white/90">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-600">
-            {{ s.title }}
-          </p>
+    <app-summary-card textTitle="Total Currencies" textDescription="20" iconName="heroGlobeAmericasSolid"
+      cardBackgroundColor="from-accent-300 to-accent-400" iconBackgroundColor="bg-accent-300"
+      iconTextColor="text-accent-700"></app-summary-card>
 
-          <p class="text-xl font-bold text-gray-900">
-            {{ s.value }}
-          </p>
-        </div>
+    <app-summary-card textTitle="Positive Changes" textDescription="5" iconName="heroArrowTrendingUpSolid"
+      cardBackgroundColor="from-green-300 to-green-400" iconBackgroundColor="bg-green-300"
+      iconTextColor="text-green-700"></app-summary-card>
 
-        <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-          <img [src]="s.icon" draggable="false">
-        </div>
-      </div>
-    </div>
-    }
+    <app-summary-card textTitle="Base Currency" textDescription="USD" iconName="heroBanknotesSolid"
+      cardBackgroundColor="from-purple-300 to-purple-400" iconBackgroundColor="bg-purple-300"
+      iconTextColor="text-purple-700"></app-summary-card>
+
+    <app-summary-card textTitle="Last Updated" textDescription="10 minutes ago" iconName="heroClockSolid"
+      cardBackgroundColor="from-indigo-300 to-indigo-400" iconBackgroundColor="bg-indigo-300"
+      iconTextColor="text-indigo-700"></app-summary-card>
   </div>
 </div>
 

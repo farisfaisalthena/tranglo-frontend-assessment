@@ -5,8 +5,12 @@ import { provideIcons } from '@ng-icons/core';
 import {
   heroWifiSolid,
   heroMoonSolid,
-  heroSunSolid
- } from '@ng-icons/heroicons/solid';
+  heroSunSolid,
+  heroGlobeAmericasSolid,
+  heroArrowTrendingUpSolid,
+  heroBanknotesSolid,
+  heroClockSolid
+} from '@ng-icons/heroicons/solid';
 
 import { routes } from './app.routes';
 
@@ -17,7 +21,11 @@ export const appConfig: ApplicationConfig = {
     provideIcons({
       heroWifiSolid,
       heroMoonSolid,
-      heroSunSolid
+      heroSunSolid,
+      heroGlobeAmericasSolid,
+      heroArrowTrendingUpSolid,
+      heroBanknotesSolid,
+      heroClockSolid
     })
   ]
 };
