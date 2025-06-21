@@ -18,6 +18,7 @@
     "@angular/platform-browser-dynamic": "^20.0.4",
     "@angular/router": "^20.0.4",
     "@capacitor/core": "^7.4.0",
+    "@capacitor/network": "^7.0.1",
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/toast": "^7.0.1",
     "@ionic/pwa-elements": "^3.3.0",
