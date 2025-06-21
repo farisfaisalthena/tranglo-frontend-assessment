@@ -29,3 +29,13 @@
   --color-card-default-light: #FFFFFF;
   --color-card-default-dark: #0C0C0C;
 }
+
+:root {
+  background: var(--color-primary-light);
+  color: #000000;
+
+  &.dark {
+    background: var(--color-primary-dark);
+    color: #FFFFFF;
+  }
+}
