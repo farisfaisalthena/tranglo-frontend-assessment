@@ -22,6 +22,10 @@ import {
   heroPlus,
   heroXMark
 } from '@ng-icons/heroicons/outline';
+import {
+  provideCharts,
+  withDefaultRegisterables
+} from 'ng2-charts';
 
 import { routes } from './app.routes';
 
@@ -46,6 +50,7 @@ export const appConfig: ApplicationConfig = {
       heroChartBar,
       heroPlus,
       heroXMark
-    })
+    }),
+    provideCharts(withDefaultRegisterables())
   ]
 };
