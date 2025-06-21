@@ -3,14 +3,15 @@ import { NgClass } from '@angular/common';
 
 import { NgIcon } from '@ng-icons/core';
 
-import { SummaryCardComponent } from '../../components';
+import { ExchangeRateComponent, SummaryCardComponent } from '../../components';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     NgIcon,
+    NgClass,
     SummaryCardComponent,
-    NgClass
+    ExchangeRateComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'

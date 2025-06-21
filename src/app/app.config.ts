@@ -15,7 +15,8 @@ import {
 import {
   heroArrowTrendingUp,
   heroBanknotes,
-  heroCalculator
+  heroCalculator,
+  heroArrowTrendingDown
 } from '@ng-icons/heroicons/outline';
 
 import { routes } from './app.routes';
@@ -35,7 +36,8 @@ export const appConfig: ApplicationConfig = {
       heroBanknotes,
       heroArrowTrendingUp,
       heroCalculator,
-      heroArrowPathSolid
+      heroArrowPathSolid,
+      heroArrowTrendingDown
     })
   ]
 };
