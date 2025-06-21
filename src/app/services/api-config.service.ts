@@ -1,8 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, switchMap, from, tap, of } from 'rxjs';
+import {
+  Observable,
+  switchMap,
+  from,
+  tap,
+  of
+} from 'rxjs';
 
-import { ApiCachingService } from './';
+import { ApiCachingService, ConfigService } from './';
 import { IHttpGetConfig } from '../interfaces';
 
 @Injectable({
@@ -12,6 +18,7 @@ export class ApiConfigService {
 
   private httpClient = inject(HttpClient);
   private apiCaching = inject(ApiCachingService);
+  private config = inject(ConfigService);
   private apiUrl: string = '';
 
   /**
@@ -43,20 +50,20 @@ export class ApiConfigService {
     };
 
     if (options.force_refresh) {
-      // return this.internetConnected$.pipe(
-      //   switchMap(status => {
-      //     if (!status) {
-      //       this.config.showToast('Some of the date will not be accessible as you are not connected on an Internet.', 'default');
-      //       return from(this.apiCaching.getCachedRequest(url) as Promise<T>);
-      //     };
+      return this.config.networkStatus$.pipe(
+        switchMap(status => {
+          if (!status) {
+            this.config.showToastMessage('Some of the date will not be accessible as you are not connected on an Internet.');
+            return from(this.apiCaching.getCachedRequest(url) as Promise<T>);
+          };
 
-      //     return this.httpClient.get<T>(url, opt).pipe(
-      //       tap(res => {
-      //         this.apiCaching.cacheRequests(url, res, options.cache_duration!);
-      //       })
-      //     );
-      //   })
-      // );
+          return this.httpClient.get<T>(url, opt).pipe(
+            tap(res => {
+              this.apiCaching.cacheRequests(url, res, options.cache_duration!);
+            })
+          );
+        })
+      );
     };
 
     const storedData: Observable<T | null> = from(this.apiCaching.getCachedRequest(url) as Promise<T | null>);
