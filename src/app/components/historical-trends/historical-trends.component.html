@@ -1,1 +1,74 @@
-<p>historical-trends works!</p>
+<div
+  class="bg-card-default-light dark:bg-card-default-dark rounded-xl p-6 mb-3 border border-muted-light dark:border-muted-dark">
+  <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+    <div>
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+        Historical Trends Analysis
+      </h2>
+
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Compare exchange rate trends for up to 3 currencies over the
+        past 30 days
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div
+        class="flex bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark rounded-xl p-1">
+        @for (h of historyOpts; track $index) {
+        <button class="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+          [ngClass]="selectedHistory === h.value ? 'bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+          (click)="selectedHistory = h.value">
+          <ng-icon [name]="h.icon" size="17"></ng-icon>
+          <span>
+            {{ h.name }}
+          </span>
+        </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+      <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+        Selected Currencies (3/3)
+      </label>
+    </div>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      @for (c of selectedCurrencies; track $index) {
+      <div
+        class="flex items-center space-x-2 px-3 py-2 bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300 rounded-xl">
+        <div class="w-3 h-3 rounded-full" [ngClass]="getRandomColor($index)"></div>
+        <span class="text-sm font-medium">
+          {{ c.code }} - {{ c.currency_name }}
+        </span>
+
+        <button class="p-1 hover:bg-accent-200 dark:hover:bg-accent-800 rounded-full transition-colors flex">
+          <ng-icon name="heroXMark" size="14"></ng-icon>
+        </button>
+      </div>
+      }
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      @for (c of popularCurrencies; track $index) {
+      <button disabled=""
+        class="px-3 py-2 rounded-xl text-sm transition-colors bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+        {{ c.code }} - {{ c.currency_name }}
+      </button>
+      }
+      <button
+        class="px-3 py-2 rounded-lg text-sm border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-not-allowed flex items-center gap-1"
+        disabled="true">
+        <ng-icon name="heroPlus"></ng-icon>
+        More Currencies
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+
+</div>

@@ -44,7 +44,8 @@
     @for (v of viewOpts; track $index) {
     <button type="button"
       class="group inline-flex items-center justify-center whitespace-nowrap py-2 align-middle font-semibold transition-all duration-300 ease-in-out stroke-blue-700 min-w-[32px] gap-1.5 text-xs hover:stroke-blue-950 hover:text-blue-950 h-7 w-full rounded-md px-3 sm:w-auto"
-      [ngClass]="selectedView === v.value ? 'bg-accent-300 text-white' : 'dark:text-white'" (click)="selectedView = v.value">
+      [ngClass]="selectedView === v.value ? 'bg-accent-300 text-white' : 'dark:text-white'"
+      (click)="selectedView = v.value">
       <ng-icon [name]="v.icon" size="20"></ng-icon>
 
       <div>
@@ -57,14 +58,14 @@
 
 <div class="space-y-8">
   @switch (selectedView) {
-    @case ('rates') {
-      <app-exchange-rate></app-exchange-rate>
-    }
-    @case ('trends') {
-      trends
-    }
-    @case ('converter') {
-      converter
-    }
+  @case ('rates') {
+  <app-exchange-rate></app-exchange-rate>
+  }
+  @case ('trends') {
+  <app-historical-trends></app-historical-trends>
+  }
+  @case ('converter') {
+  converter
+  }
   }
 </div>

@@ -3,7 +3,11 @@ import { NgClass } from '@angular/common';
 
 import { NgIcon } from '@ng-icons/core';
 
-import { ExchangeRateComponent, SummaryCardComponent } from '../../components';
+import {
+  ExchangeRateComponent,
+  HistoricalTrendsComponent,
+  SummaryCardComponent
+} from '../../components';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,7 +15,8 @@ import { ExchangeRateComponent, SummaryCardComponent } from '../../components';
     NgIcon,
     NgClass,
     SummaryCardComponent,
-    ExchangeRateComponent
+    ExchangeRateComponent,
+    HistoricalTrendsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -35,7 +40,7 @@ export class DashboardComponent {
       icon: 'heroCalculator'
     }
   ];
-  selectedView: string = this.viewOpts[0].value;
+  selectedView: string = this.viewOpts[1].value;
   autoRefresh: boolean = true;
 
   baseCurrencyOpts = [

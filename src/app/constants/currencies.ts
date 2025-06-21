@@ -1,5 +1,16 @@
 import { ICurrency } from '../interfaces';
 
+export const PopularCurrencyCodes: string[] = [
+  'USD',
+  'SGD',
+  'EUR',
+  'GBP',
+  'AUD',
+  'JPY',
+  'CNY',
+  'THB'
+];
+
 export const Currencies: ICurrency[] = [
   {
     code: 'AED',
@@ -808,3 +819,10 @@ export const Currencies: ICurrency[] = [
     country: 'Zimbabwe',
   },
 ];
+
+export const PopularCurrencies: ICurrency[] = Currencies
+  .filter(c =>
+    PopularCurrencyCodes.map(c => c.toLowerCase()
+    ).includes(c.code.toLowerCase()));
+
+    export const DefaultSelectedCurrencies: ICurrency[] = Currencies.filter(c => ['USD', 'SGD', 'EUR'].includes(c.code));
