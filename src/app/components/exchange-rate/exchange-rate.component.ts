@@ -5,6 +5,7 @@ import {
   input,
   OnInit
 } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import {
   filter,
   Observable,
@@ -13,9 +14,10 @@ import {
 
 import { NgIcon } from '@ng-icons/core';
 import { Store } from '@ngrx/store';
+import { IFuseOptions } from 'fuse.js';
 
 import { IExchangeRateData, IExchangeRateStateResponse } from '../../interfaces';
-import { CurrencySymbolConverterPipe } from '../../shared';
+import { CurrencySymbolConverterPipe, FusePipe } from '../../shared';
 import { ResponseMappingService } from '../../services/response-mapping.service';
 import { SelectBaseCurrency, SetBaseCurrency } from '../../stores/configs';
 import { SelectLastUpdated } from '../../stores/exchange-rate';
@@ -27,6 +29,8 @@ import { SelectLastUpdated } from '../../stores/exchange-rate';
     NgClass,
     AsyncPipe,
     DatePipe,
+    FusePipe,
+    FormsModule,
     CurrencySymbolConverterPipe
   ],
   templateUrl: './exchange-rate.component.html',
@@ -39,15 +43,23 @@ export class ExchangeRateComponent implements OnInit {
   autoRefresh = input<boolean>(true);
   baseCurrency$ = this.store.select(SelectBaseCurrency);
   exchangeRates$!: Observable<IExchangeRateStateResponse>;
+  isLoading: boolean = false;
   exchangeRateData: IExchangeRateData[] = [];
   filteredExchangeRateData: IExchangeRateData[] = [];
   lastUpdateAt$!: Observable<Date>;
   lastUpdateAt: Date | null = null;
   filterBy: 'code' | 'name' | 'rate' = 'code';
+  fuseOptions: IFuseOptions<IExchangeRateData> = {
+    keys: ['name', 'code'],
+    findAllMatches: true
+  };
+  searchTerm: string = '';
 
   ngOnInit(): void {
     this.exchangeRates$ = this.responseMapping.getLatestExchangeRate().pipe(
       tap(response => {
+        this.isLoading = response.loading;
+
         if (response.data !== null) {
           this.exchangeRateData = response.data;
           this.onSortData(this.filterBy);

@@ -24,7 +24,6 @@ export class ApiService {
   };
 
   getLatestExchangeRate(baseCurrency: string, forceRefresh?: boolean): Observable<IFormattedExchangeRates> {
-    console.log({forceRefresh})
     return this.getSupportedCurrency().pipe(
       switchMap(currencies => {
         return this.apiConfig.get<IExchangeRates>(`/latest/${baseCurrency}`, { force_refresh: forceRefresh }).pipe(
@@ -37,7 +36,6 @@ export class ApiService {
               }
               // Filter rate 1 because we assume when rate is one, it means were using it as base currency
             ).filter(dt => dt.rate !== 1);
-
 
             return {
               last_updated: new Date(res.time_last_update_unix * 1000),
