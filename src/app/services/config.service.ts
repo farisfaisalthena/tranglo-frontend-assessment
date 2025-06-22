@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Network } from '@capacitor/network';
 import { Toast } from '@capacitor/toast';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class ConfigService {
 
   private networkStatusSub: BehaviorSubject<boolean> = new BehaviorSubject(true);
-
-  constructor() { }
+  private baseCurrencySub: BehaviorSubject<string> = new BehaviorSubject('MYR');
 
   async listenNetworkStatus() {
     const status = await Network.getStatus();
@@ -30,7 +29,18 @@ export class ConfigService {
     });
   };
 
+  onCurrencyChange(value: string) {
+    this.baseCurrencySub.next(value);
+  };
+
   get networkStatus$(): Observable<boolean> {
     return this.networkStatusSub.asObservable();
+  };
+
+  get baseCurrency$(): Observable<string> {
+    return this.baseCurrencySub.asObservable().pipe(
+      // Ensure currency always uppercase (e.g MYR)
+      map(currency => currency.toUpperCase())
+    );
   };
 };

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { AsyncPipe, NgClass } from '@angular/common';
 
 import { NgIcon } from '@ng-icons/core';
 
@@ -8,12 +8,16 @@ import {
   HistoricalTrendsComponent,
   SummaryCardComponent
 } from '../../components';
+import { ApiService, ConfigService } from '../../services';
+import { TimeAgoPipe } from '../../shared';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
     NgIcon,
     NgClass,
+    AsyncPipe,
+    TimeAgoPipe,
     SummaryCardComponent,
     ExchangeRateComponent,
     HistoricalTrendsComponent
@@ -23,6 +27,7 @@ import {
 })
 export class DashboardComponent {
 
+  private config = inject(ConfigService);
   viewOpts = [
     {
       name: 'Exchange Rates',
@@ -40,8 +45,12 @@ export class DashboardComponent {
       icon: 'heroCalculator'
     }
   ];
-  selectedView: string = this.viewOpts[1].value;
+  selectedView: string = this.viewOpts[0].value;
   autoRefresh: boolean = true;
+  private api = inject(ApiService);
+  baseCurrency$ = this.config.baseCurrency$;
+
+  testDate = new Date('Sun Jun 22 2025 12:44:03 GMT+0800')
 
   baseCurrencyOpts = [
     { code: 'USD', name: 'US Dollar', symbol: '$' },
@@ -66,4 +75,7 @@ export class DashboardComponent {
     { code: 'KRW', name: 'South Korean Won', symbol: '₩' }
   ];
 
+  constructor() {
+    this.api.getLatestExchangeRate('myr').subscribe(r => console.log(r));
+  };
 };

@@ -21,7 +21,8 @@ import {
   heroCalendar,
   heroChartBar,
   heroPlus,
-  heroXMark
+  heroXMark,
+  heroArrowsUpDown
 } from '@ng-icons/heroicons/outline';
 import {
   provideCharts,
@@ -51,7 +52,8 @@ export const appConfig: ApplicationConfig = {
       heroCalendar,
       heroChartBar,
       heroPlus,
-      heroXMark
+      heroXMark,
+      heroArrowsUpDown
     }),
     provideCharts(withDefaultRegisterables())
   ]

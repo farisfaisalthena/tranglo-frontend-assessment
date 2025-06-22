@@ -19,7 +19,7 @@ export class ApiConfigService {
   private httpClient = inject(HttpClient);
   private apiCaching = inject(ApiCachingService);
   private config = inject(ConfigService);
-  private apiUrl: string = '';
+  private apiUrl: string = 'https://v6.exchangerate-api.com/v6/55ce693059ff37e7094afada';
 
   /**
    * GET: Request API with cache.
@@ -83,7 +83,7 @@ export class ApiConfigService {
     );
   };
 
-  convertHoursToSeconds(hours: number): number {
+  private convertHoursToSeconds(hours: number): number {
     return Math.round(hours * 3600);
   };
 };

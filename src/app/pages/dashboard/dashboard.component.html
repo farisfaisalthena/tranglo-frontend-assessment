@@ -4,15 +4,15 @@
       cardBackgroundColor="from-accent-300 to-accent-400" iconBackgroundColor="bg-accent-300"
       iconTextColor="text-accent-700"></app-summary-card>
 
-    <app-summary-card textTitle="Positive Changes" textDescription="5" iconName="heroArrowTrendingUpSolid"
+    <app-summary-card textTitle="Base Currency" [textDescription]="(baseCurrency$ | async)!"
+      iconName="heroBanknotesSolid" cardBackgroundColor="from-purple-300 to-purple-400"
+      iconBackgroundColor="bg-purple-300" iconTextColor="text-purple-700"></app-summary-card>
+
+    <app-summary-card textTitle="Last Updated" [textDescription]="testDate | timeAgo" iconName="heroClockSolid"
       cardBackgroundColor="from-green-300 to-green-400" iconBackgroundColor="bg-green-300"
       iconTextColor="text-green-700"></app-summary-card>
 
-    <app-summary-card textTitle="Base Currency" textDescription="USD" iconName="heroBanknotesSolid"
-      cardBackgroundColor="from-purple-300 to-purple-400" iconBackgroundColor="bg-purple-300"
-      iconTextColor="text-purple-700"></app-summary-card>
-
-    <app-summary-card textTitle="Last Updated" textDescription="10 minutes ago" iconName="heroClockSolid"
+    <app-summary-card textTitle="Last Refresh" [textDescription]="testDate | timeAgo" iconName="heroArrowPathSolid"
       cardBackgroundColor="from-indigo-300 to-indigo-400" iconBackgroundColor="bg-indigo-300"
       iconTextColor="text-indigo-700"></app-summary-card>
   </div>
