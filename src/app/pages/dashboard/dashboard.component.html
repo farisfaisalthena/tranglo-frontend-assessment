@@ -8,13 +8,16 @@
       iconName="heroBanknotesSolid" cardBackgroundColor="from-purple-300 to-purple-400"
       iconBackgroundColor="bg-purple-300" iconTextColor="text-purple-700"></app-summary-card>
 
-    <app-summary-card textTitle="Last Updated" [textDescription]="testDate | timeAgo" iconName="heroClockSolid"
-      cardBackgroundColor="from-green-300 to-green-400" iconBackgroundColor="bg-green-300"
+    <app-summary-card textTitle="Next Refresh" [textDescription]="autoRefresh ? timerText : 'Disabled'"
+      iconName="heroClockSolid" cardBackgroundColor="from-green-300 to-green-400" iconBackgroundColor="bg-green-300"
       iconTextColor="text-green-700"></app-summary-card>
 
-    <app-summary-card textTitle="Last Refresh" [textDescription]="testDate | timeAgo" iconName="heroArrowPathSolid"
-      cardBackgroundColor="from-indigo-300 to-indigo-400" iconBackgroundColor="bg-indigo-300"
-      iconTextColor="text-indigo-700"></app-summary-card>
+    <!-- Trigger the Observable -->
+    @if (lastExchangeRateRefresh$ | async) {}
+    <app-summary-card textTitle="Last Refresh"
+      [textDescription]="lastExchangeRateRefresh ? (lastExchangeRateRefresh | timeAgo) : 'Never'"
+      iconName="heroArrowPathSolid" cardBackgroundColor="from-indigo-300 to-indigo-400"
+      iconBackgroundColor="bg-indigo-300" iconTextColor="text-indigo-700"></app-summary-card>
   </div>
 </div>
 
@@ -25,14 +28,15 @@
 
       <div class="flex items-center space-x-2">
         <button type="button"
-          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center gap-2">
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 flex items-center gap-2"
+          (click)="manualRefresh()">
           <ng-icon name="heroArrowPathSolid" size="16"></ng-icon>
           Refresh
         </button>
 
         <button type="button" class="focus:ring-2 font-medium rounded-lg text-sm px-5 py-2.5 focus:outline-none"
-          [ngClass]="autoRefresh ? 'bg-green-900 text-green-300 focus:ring-green-300' : 'bg-gray-900 text-gray-300 focus:ring-gray-300'"
-          (click)="autoRefresh = !autoRefresh">
+          [ngClass]="autoRefresh ? 'bg-green-900 text-green-300 focus:ring-green-300' : 'bg-gray-900 text-gray-300 focus:ring-gray-300 border border-muted-light dark:border-muted-dark'"
+          (click)="toggleAutoRefresh()">
           Auto-refresh {{ autoRefresh ? 'ON' : 'OFF' }}
         </button>
       </div>

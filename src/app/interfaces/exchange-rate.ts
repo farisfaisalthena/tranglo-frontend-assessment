@@ -20,3 +20,18 @@ export interface IExchangeRateData {
   name: string;
   rate: number;
 };
+
+export interface IExchangeRateState {
+  base_currency: string;
+  data: IExchangeRateData[];
+  last_updated: Date | null;
+  last_refresh: Date | null;
+  loading: boolean;
+  error: string | null;
+};
+
+export interface IExchangeRateStateResponse {
+  data: IExchangeRateData[];
+  loading: boolean;
+  error: string | null;
+};

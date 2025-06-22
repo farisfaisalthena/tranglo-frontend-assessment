@@ -1,17 +1,24 @@
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass } from '@angular/common';
 import {
   Component,
   inject,
   input,
   OnInit
 } from '@angular/core';
-import { Observable, switchMap } from 'rxjs';
+import {
+  filter,
+  Observable,
+  tap
+} from 'rxjs';
 
 import { NgIcon } from '@ng-icons/core';
+import { Store } from '@ngrx/store';
 
-import { ApiService, ConfigService } from '../../services';
-import { IFormattedExchangeRates } from '../../interfaces';
+import { IExchangeRateData, IExchangeRateStateResponse } from '../../interfaces';
 import { CurrencySymbolConverterPipe } from '../../shared';
+import { ResponseMappingService } from '../../services/response-mapping.service';
+import { SelectBaseCurrency, SetBaseCurrency } from '../../stores/configs';
+import { SelectLastUpdated } from '../../stores/exchange-rate';
 
 @Component({
   selector: 'app-exchange-rate',
@@ -19,6 +26,7 @@ import { CurrencySymbolConverterPipe } from '../../shared';
     NgIcon,
     NgClass,
     AsyncPipe,
+    DatePipe,
     CurrencySymbolConverterPipe
   ],
   templateUrl: './exchange-rate.component.html',
@@ -26,23 +34,57 @@ import { CurrencySymbolConverterPipe } from '../../shared';
 })
 export class ExchangeRateComponent implements OnInit {
 
-  private api = inject(ApiService);
-  private config = inject(ConfigService);
+  private store = inject(Store);
+  private responseMapping = inject(ResponseMappingService);
   autoRefresh = input<boolean>(true);
-  baseCurrency$ = this.config.baseCurrency$;
-  exchangeRates$!: Observable<IFormattedExchangeRates>;
+  baseCurrency$ = this.store.select(SelectBaseCurrency);
+  exchangeRates$!: Observable<IExchangeRateStateResponse>;
+  exchangeRateData: IExchangeRateData[] = [];
+  filteredExchangeRateData: IExchangeRateData[] = [];
+  lastUpdateAt$!: Observable<Date>;
+  lastUpdateAt: Date | null = null;
+  filterBy: 'code' | 'name' | 'rate' = 'code';
 
   ngOnInit(): void {
-    this.doRefresh();
-  };
+    this.exchangeRates$ = this.responseMapping.getLatestExchangeRate().pipe(
+      tap(response => {
+        if (response.data !== null) {
+          this.exchangeRateData = response.data;
+          this.onSortData(this.filterBy);
+        };
+      })
+    );
 
-  doRefresh(forceRefresh?: boolean) {
-    this.exchangeRates$ = this.config.baseCurrency$.pipe(
-      switchMap(currency => this.api.getLatestExchangeRate(currency, forceRefresh))
+    this.lastUpdateAt$ = this.store.select(SelectLastUpdated).pipe(
+      filter(val => val !== null),
+      tap(val => this.lastUpdateAt = val)
     );
   };
 
-  setCurrencyAsBase(currency: string) {
-    this.config.onCurrencyChange(currency);
+  onSortData(filterBy: 'code' | 'name' | 'rate') {
+    this.filterBy = filterBy;
+    this.filteredExchangeRateData = this.sortRates(this.exchangeRateData, this.filterBy);
   };
+
+  setCurrencyAsBase(currency: string) {
+    this.store.dispatch(SetBaseCurrency({ currency }));
+  };
+
+  sortRates<K extends keyof IExchangeRateData>(items: IExchangeRateData[], key: K): IExchangeRateData[] {
+    return [...items].sort((a, b) => {
+      const vA = a[key];
+      const vB = b[key];
+
+      let cmp: number;
+      if (typeof vA === 'number' && typeof vB === 'number') {
+        // numeric
+        cmp = vA - vB;
+      } else {
+        // string (or fallback)
+        cmp = String(vA).localeCompare(String(vB));
+      }
+
+      return 1 * cmp;
+    });
+  }
 };

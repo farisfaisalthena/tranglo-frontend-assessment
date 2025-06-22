@@ -1,0 +1,2 @@
+export const REFRESH_TIMER_IN_SECONDS: number = 60
+export const REFRESH_TIMER_IN_MS: number = REFRESH_TIMER_IN_SECONDS * 1000;

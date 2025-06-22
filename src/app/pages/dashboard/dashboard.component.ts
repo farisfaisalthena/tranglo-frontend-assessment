@@ -1,15 +1,27 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, NgClass } from '@angular/common';
+import {
+  filter,
+  Observable,
+  Subscription,
+  takeWhile,
+  tap,
+  timer
+} from 'rxjs';
 
 import { NgIcon } from '@ng-icons/core';
+import { Store } from '@ngrx/store';
 
 import {
   ExchangeRateComponent,
   HistoricalTrendsComponent,
   SummaryCardComponent
 } from '../../components';
-import { ApiService, ConfigService } from '../../services';
+import { ConfigService } from '../../services';
 import { TimeAgoPipe } from '../../shared';
+import { RefreshExchangeRate, SelectLastRefreshed } from '../../stores/exchange-rate';
+import { SelectBaseCurrency, ToggleAutoRefresh } from '../../stores/configs';
+import { REFRESH_TIMER_IN_SECONDS } from '../../constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,9 +37,10 @@ import { TimeAgoPipe } from '../../shared';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
 
   private config = inject(ConfigService);
+  private store = inject(Store);
   viewOpts = [
     {
       name: 'Exchange Rates',
@@ -47,35 +60,68 @@ export class DashboardComponent {
   ];
   selectedView: string = this.viewOpts[0].value;
   autoRefresh: boolean = true;
-  private api = inject(ApiService);
-  baseCurrency$ = this.config.baseCurrency$;
+  baseCurrency$ = this.store.select(SelectBaseCurrency);
+  lastExchangeRateRefresh$!: Observable<Date>;
+  lastExchangeRateRefresh: Date | null = null;
+  // Refresh Timer Variables
+  timerSubscription: Subscription | null = null;
+  timerDurationLeft = REFRESH_TIMER_IN_SECONDS;
+  timerText: string = '01:00';
 
-  testDate = new Date('Sun Jun 22 2025 12:44:03 GMT+0800')
+  ngOnInit(): void {
+    this.lastExchangeRateRefresh$ = this.store.select(SelectLastRefreshed).pipe(
+      filter(val => val !== null),
+      tap(val => this.lastExchangeRateRefresh = val)
+    );
 
-  baseCurrencyOpts = [
-    { code: 'USD', name: 'US Dollar', symbol: '$' },
-    { code: 'EUR', name: 'Euro', symbol: '€' },
-    { code: 'GBP', name: 'British Pound', symbol: '£' },
-    { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
-    { code: 'AUD', name: 'Australian Dollar', symbol: 'A$' },
-    { code: 'CAD', name: 'Canadian Dollar', symbol: 'C$' },
-    { code: 'CHF', name: 'Swiss Franc', symbol: 'CHF' },
-    { code: 'CNY', name: 'Chinese Yuan', symbol: '¥' },
-    { code: 'SEK', name: 'Swedish Krona', symbol: 'kr' },
-    { code: 'NZD', name: 'New Zealand Dollar', symbol: 'NZ$' },
-    { code: 'MXN', name: 'Mexican Peso', symbol: '$' },
-    { code: 'SGD', name: 'Singapore Dollar', symbol: 'S$' },
-    { code: 'HKD', name: 'Hong Kong Dollar', symbol: 'HK$' },
-    { code: 'NOK', name: 'Norwegian Krone', symbol: 'kr' },
-    { code: 'TRY', name: 'Turkish Lira', symbol: '₺' },
-    { code: 'RUB', name: 'Russian Ruble', symbol: '₽' },
-    { code: 'INR', name: 'Indian Rupee', symbol: '₹' },
-    { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
-    { code: 'ZAR', name: 'South African Rand', symbol: 'R' },
-    { code: 'KRW', name: 'South Korean Won', symbol: '₩' }
-  ];
+    this.startTimer();
+  };
 
-  constructor() {
-    this.api.getLatestExchangeRate('myr').subscribe(r => console.log(r));
+  startTimer() {
+    // Do nothing if timer is already running
+    if (this.timerSubscription && !this.timerSubscription.closed) return;
+    // Ensure previous timer is stopped if any (though takeWhile should handle it for resets)
+    this.stopTimer();
+
+    this.timerSubscription = timer(0, 1000).pipe(takeWhile(() => this.timerDurationLeft >= 0))
+      .subscribe(() => {
+        this.updateTimerDisplay();
+
+        this.timerDurationLeft === 0 ? REFRESH_TIMER_IN_SECONDS : this.timerDurationLeft--;
+      });
+  };
+
+  updateTimerDisplay() {
+    const minutes = Math.floor(this.timerDurationLeft / 60);
+    const seconds = this.timerDurationLeft % 60;
+
+    this.timerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  stopTimer(): void {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = null;
+    }
+  };
+
+  toggleAutoRefresh() {
+    this.autoRefresh = !this.autoRefresh;
+
+    if (this.autoRefresh) {
+      this.startTimer();
+    } else {
+      this.stopTimer();
+    };
+
+    this.store.dispatch(ToggleAutoRefresh({ enabled: this.autoRefresh }));
+  };
+
+  manualRefresh() {
+    this.store.dispatch(RefreshExchangeRate());
+  };
+
+  ngOnDestroy(): void {
+    this.stopTimer();
   };
 };

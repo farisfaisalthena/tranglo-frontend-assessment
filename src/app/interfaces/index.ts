@@ -1,3 +1,4 @@
+export { type IConfigState } from './config';
 export {
   type ICurrency,
   type ILocalCurrencyData
@@ -5,7 +6,9 @@ export {
 export {
   type IExchangeRates,
   type IFormattedExchangeRates,
-  type IExchangeRateData
+  type IExchangeRateData,
+  type IExchangeRateState,
+  type IExchangeRateStateResponse
 } from './exchange-rate';
 export { type IHttpGetConfig } from './http-config';
 export {

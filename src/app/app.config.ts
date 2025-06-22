@@ -28,8 +28,15 @@ import {
   provideCharts,
   withDefaultRegisterables
 } from 'ng2-charts';
+import { provideStore } from '@ngrx/store';
+import { provideEffects } from '@ngrx/effects';
 
 import { routes } from './app.routes';
+import {
+  ExchangeRateEffects,
+  GetLatestExchangeRateReducer
+} from './stores/exchange-rate';
+import { ConfigReducer } from './stores/configs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -55,6 +62,13 @@ export const appConfig: ApplicationConfig = {
       heroXMark,
       heroArrowsUpDown
     }),
-    provideCharts(withDefaultRegisterables())
+    provideCharts(withDefaultRegisterables()),
+    provideStore({
+      get_exchange_rate: GetLatestExchangeRateReducer,
+      config: ConfigReducer
+    }),
+    provideEffects([
+      ExchangeRateEffects
+    ])
   ]
 };

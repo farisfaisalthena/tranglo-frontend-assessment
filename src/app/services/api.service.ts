@@ -23,7 +23,8 @@ export class ApiService {
     );
   };
 
-  getLatestExchangeRate(baseCurrency: string, forceRefresh: boolean = false): Observable<IFormattedExchangeRates> {
+  getLatestExchangeRate(baseCurrency: string, forceRefresh?: boolean): Observable<IFormattedExchangeRates> {
+    console.log({forceRefresh})
     return this.getSupportedCurrency().pipe(
       switchMap(currencies => {
         return this.apiConfig.get<IExchangeRates>(`/latest/${baseCurrency}`, { force_refresh: forceRefresh }).pipe(

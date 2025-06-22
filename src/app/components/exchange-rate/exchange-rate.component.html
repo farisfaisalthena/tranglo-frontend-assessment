@@ -1,9 +1,17 @@
 <div
-  class="bg-card-default-light dark:bg-card-default-dark relative sm:rounded-xl overflow-hidden border border-muted-light dark:border-muted-dark">
+  class="bg-card-default-light dark:bg-card-default-dark relative rounded-xl overflow-hidden border border-muted-light dark:border-muted-dark">
   <div class="flex flex-col md:flex-row justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
-    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-      Exchange Rates (Base: {{ baseCurrency$ | async }})
-    </h2>
+    <div>
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+        Exchange Rates (Base: {{ baseCurrency$ | async }})
+      </h2>
+
+      <!-- Trigger the Observable -->
+      @if (lastUpdateAt$ | async) {}
+      <p class="text-xs text-gray-900 dark:text-white">
+        Last Updated: {{ lastUpdateAt ? (lastUpdateAt | date: 'MMMM d, y, hh:mm a') : 'N/A' }}
+      </p>
+    </div>
 
     <div class="w-full md:w-1/2">
       <form class="flex items-center">
@@ -33,7 +41,8 @@
           <th scope="col" class="px-4 py-3">
             <div class="flex items-center gap-1">
               Currency
-              <a class="flex items-center cursor-pointer">
+              <a class="flex items-center cursor-pointer" [ngClass]="{ 'text-green-500': filterBy === 'code' }"
+                (click)="onSortData('code')">
                 <ng-icon name="heroArrowsUpDown" size="14"></ng-icon>
               </a>
             </div>
@@ -41,7 +50,8 @@
           <th scope="col" class="px-4 py-3">
             <div class="flex items-center gap-1">
               Name
-              <a class="flex items-center cursor-pointer">
+              <a class="flex items-center cursor-pointer" [ngClass]="{ 'text-green-500': filterBy === 'name' }"
+                (click)="onSortData('name')">
                 <ng-icon name="heroArrowsUpDown" size="14"></ng-icon>
               </a>
             </div>
@@ -49,9 +59,9 @@
           <th scope="col" class="px-4 py-3">
             <div class="flex items-center gap-1">
               Rate
-              <!-- text-green-500 -->
-              <a class="flex items-center cursor-pointer">
-                <ng-icon name="heroArrowsUpDown" size="14"></ng-icon>
+              <a class="flex items-center cursor-pointer" [ngClass]="{ 'text-green-500': filterBy === 'rate' }"
+                (click)="onSortData('rate')">
+                <ng-icon name=" heroArrowsUpDown" size="14"></ng-icon>
               </a>
             </div>
           </th>
@@ -61,7 +71,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (data of exchangeRates.data; track $index) {
+        @for (data of filteredExchangeRateData; track $index) {
         <tr class="border-b border-muted-light dark:border-muted-dark even:bg-toolbar-light even:dark:bg-toolbar-dark">
           <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
             <div class="flex items-center gap-3">
@@ -93,6 +103,12 @@
             </button>
           </td>
         </tr>
+        } @empty {
+          <div class="p-5 w-full">
+            <h2 class="font-bold text-red-500">
+              No Data Available
+            </h2>
+          </div>
         }
       </tbody>
     </table>
