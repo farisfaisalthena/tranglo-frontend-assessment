@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import currencyData from '../../../public/currencies.json';
-import { ILocalCurrencyData } from '../interfaces';
+import currencyData from '../../../../public/currencies.json';
+import { ILocalCurrencyData } from '../../interfaces';
 
 @Pipe({
   name: 'currencySymbolConverter'
