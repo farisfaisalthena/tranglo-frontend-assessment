@@ -32,13 +32,17 @@ export class CurrencySelectionModalComponent implements OnInit {
   };
   searchTerm: string = '';
   skeleton = new Array(3);
-  onModalDismiss = output<void>();
+  onModalDismiss = output<{ currencyCode: string | null; }>();
 
   ngOnInit(): void {
     this.currencies$ = this.api.getSupportedCurrency();
   };
 
-  dismissModal() {
-    this.onModalDismiss.emit();
+  onSelectData(currencyCode: string) {
+    this.dismissModal(currencyCode);
+  };
+
+  dismissModal(currencyCode: string | null = null) {
+    this.onModalDismiss.emit({ currencyCode });
   };
 };

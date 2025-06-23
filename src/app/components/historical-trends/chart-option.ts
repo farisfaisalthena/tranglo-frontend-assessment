@@ -1,6 +1,6 @@
 import { ChartOptions } from 'chart.js';
 
-export const getHistoricalDataChartOption = (baseCurrency: string, theme: string): ChartOptions => {
+export const getHistoricalDataChartOption = (title: string, theme: string): ChartOptions => {
   return {
     responsive: true,
     maintainAspectRatio: true,
@@ -11,7 +11,7 @@ export const getHistoricalDataChartOption = (baseCurrency: string, theme: string
     plugins: {
       title: {
         display: true,
-        text: `Exchange Rate Trends vs ${baseCurrency}`,
+        text: title,
         font: {
           size: 16,
           weight: 'bold'

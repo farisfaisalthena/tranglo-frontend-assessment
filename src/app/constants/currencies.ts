@@ -825,4 +825,4 @@ export const PopularCurrencies: ICurrency[] = Currencies
     PopularCurrencyCodes.map(c => c.toLowerCase()
     ).includes(c.code.toLowerCase()));
 
-    export const DefaultSelectedCurrencies: ICurrency[] = Currencies.filter(c => ['USD', 'SGD', 'EUR'].includes(c.code));
+    export const DefaultSelectedCurrencies: ICurrency[] = Currencies.filter(c => ['EUR', 'GBP', 'USD'].includes(c.code));

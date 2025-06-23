@@ -12,7 +12,8 @@
     </div>
 
     <button type="button"
-      class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white" (click)="dismissModal()">
+      class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+      (click)="dismissModal()">
       <ng-icon name="heroXMark" size="22"></ng-icon>
       <span class="sr-only">Close modal</span>
     </button>
@@ -33,7 +34,8 @@
     @if (currencies$ | async; as currencies) {
     @for (c of currencies| fuse:searchTerm:fuseOptions; track $index) {
     <button
-      class="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors group">
+      class="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors group"
+      (click)="onSelectData(c.code)">
       <div class="flex items-center space-x-3">
         <div class="size-10 bg-gray-100 dark:bg-gray-600 rounded-full flex items-center justify-center">
           <span class="text-sm font-medium text-gray-700 dark:text-gray-300">

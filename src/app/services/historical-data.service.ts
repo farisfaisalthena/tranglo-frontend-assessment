@@ -50,8 +50,9 @@ export class HistoricalDataService {
           aggregationType
         );
 
+        const graphTitle = `Exchange Rate Trends: ${targetCurrencies.join(', ')} vs ${baseCurrency}`
         const theme = localStorage.getItem('color-theme')?.toLowerCase();
-        const options = getHistoricalDataChartOption(baseCurrency, theme ?? 'light');
+        const options = getHistoricalDataChartOption(graphTitle, theme ?? 'light');
         const labels = aggregatedData.map((dataPoint) => dataPoint.date);
 
         const colors = [
