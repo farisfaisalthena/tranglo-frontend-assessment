@@ -76,7 +76,9 @@
   @if (chart$ |async; as chart) {
   <canvas baseChart [type]="'line'" [options]="chart.options" [data]="chart.data"></canvas>
   } @else {
-  loading...
+  <div class="animate-pulse">
+    <div class="h-100 bg-gray-200 rounded-xl dark:bg-gray-700 w-full"></div>
+  </div>
   }
 </div>
 }
