@@ -23,6 +23,7 @@ import {
 import { IChart, IHistoricalData } from '../interfaces';
 import { getHistoricalDataChartOption } from '../components/historical-trends/chart-option';
 import { THistoricalAggregationType } from '../types';
+import { GetCurrencyDetails } from '../constants';
 
 interface IAggregatedDataPoint {
   date: string;
@@ -56,21 +57,21 @@ export class HistoricalDataService {
         const labels = aggregatedData.map((dataPoint) => dataPoint.date);
 
         const colors = [
-          'rgb(59, 130, 246)',
-          'rgb(16, 185, 129)',
-          'rgb(239, 68, 68)'
+          'rgb(245, 158, 11)',
+          'rgb(139, 92, 246)',
+          'rgb(59, 130, 246)'
         ];
         const backgroundColors = [
+          'rgba(245, 158, 11, 0.2)',
+          'rgba(139, 92, 246, 0.2)',
           'rgba(59, 130, 246, 0.2)',
-          'rgba(16, 185, 129, 0.2)',
-          'rgba(239, 68, 68, 0.2)',
         ];
 
         const datasets: ChartDataset[] = targetCurrencies.map((currencyCode, index) => {
           const color = colors[index];
           const bgColor = backgroundColors[index];
           const data = aggregatedData.map(d => d.rates[currencyCode]);
-          const label = `${currencyCode}`
+          const label = `${currencyCode} - ${GetCurrencyDetails(currencyCode).name}`
 
           return {
             label,
