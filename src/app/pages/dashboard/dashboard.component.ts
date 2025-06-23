@@ -16,7 +16,8 @@ import {
   SummaryCardComponent,
   ExchangeRateComponent,
 
-  HistoricalTrendsComponent
+  HistoricalTrendsComponent,
+  CurrencyConverterComponent
 } from '@src/app/components';
 import {
   GetCurrencyData,
@@ -41,7 +42,8 @@ import {
     TimeAgoPipe,
     SummaryCardComponent,
     ExchangeRateComponent,
-    HistoricalTrendsComponent
+    HistoricalTrendsComponent,
+    CurrencyConverterComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
@@ -66,7 +68,7 @@ export class DashboardComponent implements OnInit {
       icon: 'heroCalculator'
     }
   ];
-  selectedView: string = this.viewOpts[1].value;
+  selectedView: string = this.viewOpts[0].value;
   autoRefresh: boolean = true;
   baseCurrency$ = this.store.select(SelectBaseCurrency);
   lastExchangeRateRefresh$!: Observable<Date>;

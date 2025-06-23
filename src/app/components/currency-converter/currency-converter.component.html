@@ -1,1 +1,77 @@
-<p>currency-converter works!</p>
+<div
+  class="bg-card-default-light dark:bg-card-default-dark rounded-xl p-6 border border-muted-light dark:border-muted-dark">
+  <div class="mb-8">
+    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+      Quick Amounts
+    </label>
+
+    <div class="flex flex-wrap gap-2">
+      @for (q of quickAmountOpts; track $index) {
+      <button class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+        [ngClass]="selectedAmount === q ? 'bg-blue-600 text-white shadow-lg transform scale-105' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'"
+        (click)="selectedAmount = q">
+        {{ q | number }}
+      </button>
+      }
+
+      <button
+        class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105">
+        Custom
+      </button>
+    </div>
+  </div>
+
+  <div class="space-y-6 flex items-center justify-between gap-5 flex-col md:flex-row md:items-end">
+    <div class="w-full m-0">
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        Amount
+      </label>
+
+      <div class="relative">
+        <input type="search" id="search"
+          class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
+          placeholder="Enter an Amount" />
+
+        <button
+          class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light dark:border-muted-dark flex items-center justify-center gap-2">
+          MYR
+          <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
+        </button>
+      </div>
+    </div>
+
+    <button
+      class="p-3 rounded-full bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white transition-all duration-300 transform hover:scale-110 mb-0 flex items-center">
+      <ng-icon name="heroArrowsRightLeftSolid" size="24"></ng-icon>
+    </button>
+
+    <div class="w-full">
+      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+        Converted Amount
+      </label>
+
+      <div class="relative">
+        <input type="search" id="search"
+          class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
+          placeholder="Enter an Amount" />
+
+        <button
+          class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light dark:border-muted-dark flex items-center justify-center gap-2">
+          MYR
+          <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="bg-gradient-to-r from-accent-700 to-accent-600 px-6 md:px-8 py-6 flex items-center flex-col mt-5 rounded-xl">
+    <h2 class="text-xl md:text-2xl font-bold text-white mb-2">
+      $1000.00 = €869.00
+    </h2>
+
+    <p class="text-sm text-gray-700 dark:text-gray-300">
+      Last updated at 7:45:46 PM
+    </p>
+  </div>
+</div>
