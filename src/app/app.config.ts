@@ -11,7 +11,8 @@ import {
   heroArrowTrendingUpSolid,
   heroBanknotesSolid,
   heroClockSolid,
-  heroArrowPathSolid
+  heroArrowPathSolid,
+  heroPlusSolid
 } from '@ng-icons/heroicons/solid';
 import {
   heroArrowTrendingUp,
@@ -22,7 +23,8 @@ import {
   heroChartBar,
   heroPlus,
   heroXMark,
-  heroArrowsUpDown
+  heroArrowsUpDown,
+  heroMagnifyingGlass
 } from '@ng-icons/heroicons/outline';
 import {
   provideCharts,
@@ -60,7 +62,9 @@ export const appConfig: ApplicationConfig = {
       heroChartBar,
       heroPlus,
       heroXMark,
-      heroArrowsUpDown
+      heroArrowsUpDown,
+      heroPlusSolid,
+      heroMagnifyingGlass
     }),
     provideCharts(withDefaultRegisterables()),
     provideStore({

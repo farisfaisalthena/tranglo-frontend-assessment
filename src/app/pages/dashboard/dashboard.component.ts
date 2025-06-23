@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit {
       icon: 'heroCalculator'
     }
   ];
-  selectedView: string = this.viewOpts[0].value;
+  selectedView: string = this.viewOpts[1].value;
   autoRefresh: boolean = true;
   baseCurrency$ = this.store.select(SelectBaseCurrency);
   lastExchangeRateRefresh$!: Observable<Date>;

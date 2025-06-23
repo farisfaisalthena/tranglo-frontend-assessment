@@ -1,0 +1,88 @@
+<div
+  class="relative rounded-xl shadow-sm bg-primary-light dark:bg-primary-dark border border border-muted-light dark:border-muted-dark">
+  <div class="flex items-center justify-between rounded-t border-b p-5 border-muted-light dark:border-muted-dark">
+    <div>
+      <h3 class="text-xl font-semibold text-gray-900 dark:text-white lg:text-2xl">
+        Add Currency
+      </h3>
+
+      <p class="text-sm text-gray-500 dark:text-gray-400">
+        Select a currency to add to your comparison
+      </p>
+    </div>
+
+    <button type="button"
+      class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-full bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white" (click)="dismissModal()">
+      <ng-icon name="heroXMark" size="22"></ng-icon>
+      <span class="sr-only">Close modal</span>
+    </button>
+  </div>
+
+  <div class="p-3 border-b border-muted-light dark:border-muted-dark">
+    <div class="relative">
+      <ng-icon class="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
+        name="heroMagnifyingGlass" size="20"></ng-icon>
+
+      <input type="text" placeholder="Search currencies (e.g., MYR or Malaysian Ringgit)"
+        class="w-full pl-10 pr-4 py-3 border border border-muted-light dark:border-muted-dark rounded-xl bg-card-default-light dark:bg-card-default-dark text-gray-900 dark:text-white focus:ring-1 focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900 transition-colors placeholder-gray-500 dark:placeholder-gray-400 focus:outline-hidden"
+        [(ngModel)]="searchTerm" [ngModelOptions]="{standalone: true}">
+    </div>
+  </div>
+
+  <div class="flex-grow space-y-3 p-2 overflow-y-auto max-h-[calc(80vh-240px)]">
+    @if (currencies$ | async; as currencies) {
+    @for (c of currencies| fuse:searchTerm:fuseOptions; track $index) {
+    <button
+      class="w-full flex items-center justify-between p-3 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-xl transition-colors group">
+      <div class="flex items-center space-x-3">
+        <div class="size-10 bg-gray-100 dark:bg-gray-600 rounded-full flex items-center justify-center">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            {{ c.code | currencySymbolConverter }}
+          </span>
+        </div>
+
+        <div class="text-left">
+          <div class="font-medium text-gray-900 dark:text-white">
+            {{ c.code }}
+          </div>
+
+          <div class="text-sm text-gray-500 dark:text-gray-400">
+            {{ c.name }}
+          </div>
+        </div>
+      </div>
+
+      <ng-icon name="heroPlusSolid" size="20"></ng-icon>
+    </button>
+    } @empty {
+    <p class="p-6 text-center text-red-500">
+      Sorry, '{{ searchTerm }}' currency was not found
+    </p>
+    }
+    } @else {
+    @for (_ of skeleton; track $index) {
+    <button class="w-full flex items-center justify-between p-3 rounded-xl animate-pulse">
+      <div class="flex items-center space-x-3">
+        <div class="size-10 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center">
+          <span>
+            <div class="w-full h-full"></div>
+          </span>
+        </div>
+
+        <div class="text-left">
+          <div class="mb-2">
+            <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+          </div>
+
+          <div>
+            <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-20"></div>
+          </div>
+        </div>
+      </div>
+
+      <ng-icon name="heroPlusSolid" size="20"></ng-icon>
+    </button>
+    }
+    }
+  </div>
+</div>

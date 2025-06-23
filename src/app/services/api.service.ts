@@ -6,6 +6,7 @@ import {
   IExchangeRateData,
   IExchangeRates,
   IFormattedExchangeRates,
+  IHistoricalData,
   ISupportedCurrency,
   ISupportedCurrencyResponse
 } from '../interfaces';
@@ -45,5 +46,11 @@ export class ApiService {
         )
       })
     );
+  };
+
+  getHistoricalData(baseCurrency: string, year: number, month: number, day: number) {
+    const endpoint: string = `/history/${baseCurrency}/${year}/${month}/${day}`;
+
+    return this.apiConfig.get<IHistoricalData>(endpoint, { force_refresh: false, cache_duration: 24 });
   };
 };
