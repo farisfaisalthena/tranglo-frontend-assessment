@@ -3,6 +3,7 @@ import { map, Observable } from 'rxjs';
 
 import { ApiConfigService } from './';
 import {
+  IConvertResponse,
   IExchangeRateData,
   IExchangeRates,
   IFormattedExchangeRates,
@@ -41,5 +42,9 @@ export class ApiService {
     const endpoint: string = `/history/${baseCurrency}/${year}/${month}/${day}`;
 
     return this.apiConfig.get<IHistoricalData>(endpoint, { force_refresh: false, cache_duration: 24 });
+  };
+
+  getConversionPair(baseCurrency: string, targetCurrency: string, amount: number) {
+    return this.apiConfig.get<IConvertResponse>(`/pair/${baseCurrency}/${targetCurrency}/${amount}`);
   };
 };

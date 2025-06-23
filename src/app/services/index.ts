@@ -3,3 +3,4 @@ export { ApiConfigService } from './api-config.service';
 export { ApiService } from './api.service';
 export { ConfigService } from './config.service';
 export { HistoricalDataService } from './historical-data.service';
+export { ResponseMappingService } from './response-mapping.service';

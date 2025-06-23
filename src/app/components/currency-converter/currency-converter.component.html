@@ -9,69 +9,82 @@
       @for (q of quickAmountOpts; track $index) {
       <button class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
         [ngClass]="selectedAmount === q ? 'bg-blue-600 text-white shadow-lg transform scale-105' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'"
-        (click)="selectedAmount = q">
+        (click)="onQuickAmountChange(q)">
         {{ q | number }}
       </button>
       }
+    </div>
+  </div>
+
+  @if (exchangeRates$ | async; as exchangeRates) {}
+  <form [formGroup]="currencyConverterForm">
+    <div class="space-y-6 flex items-center justify-between gap-5 flex-col md:flex-row md:items-end">
+      <div class="w-full m-0">
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Amount
+        </label>
+
+        <div class="relative">
+          <input type="search" id="search"
+            class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
+            placeholder="Enter an Amount" inputmode="decimal" autocomplete="off"
+            [(ngModel)]="currencyConverterConfig.baseCurrencyAmount" [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="onAmountChange()" />
+
+          <button
+            class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light bg-primary-light dark:bg-primary-dark dark:border-muted-dark flex items-center justify-center gap-2"
+            (click)="openModal('baseCurrency')">
+            {{ currencyConverterConfig.baseCurrency }}
+            <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
+          </button>
+        </div>
+      </div>
 
       <button
-        class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105">
-        Custom
+        class="p-3 rounded-full bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white transition-all duration-300 transform hover:scale-110 mb-0 flex items-center"
+        (click)="swapCurrencies()">
+        <ng-icon name="heroArrowsRightLeftSolid" size="24"></ng-icon>
       </button>
-    </div>
-  </div>
 
-  <div class="space-y-6 flex items-center justify-between gap-5 flex-col md:flex-row md:items-end">
-    <div class="w-full m-0">
-      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-        Amount
-      </label>
+      <div class="w-full">
+        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          Converted Amount
+        </label>
 
-      <div class="relative">
-        <input type="search" id="search"
-          class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
-          placeholder="Enter an Amount" />
+        <div class="relative">
+          <input type="search" id="search"
+            class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
+            placeholder="Enter an Amount" inputmode="decimal" autocomplete="off" disabled="true"
+            [value]="currencyConverterConfig.targetCurrencyAmount | number : '1.2-2'" />
 
-        <button
-          class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light dark:border-muted-dark flex items-center justify-center gap-2">
-          MYR
-          <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
-        </button>
+          <button
+            class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light dark:border-muted-dark flex items-center justify-center gap-2"
+            (click)="openModal('targetCurrency')">
+            {{ currencyConverterConfig.targetCurrency }}
+            <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
+          </button>
+        </div>
       </div>
     </div>
-
-    <button
-      class="p-3 rounded-full bg-transparent hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white transition-all duration-300 transform hover:scale-110 mb-0 flex items-center">
-      <ng-icon name="heroArrowsRightLeftSolid" size="24"></ng-icon>
-    </button>
-
-    <div class="w-full">
-      <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-        Converted Amount
-      </label>
-
-      <div class="relative">
-        <input type="search" id="search"
-          class="block w-full pl-4 pr-4 py-3.5 text-sm text-gray-900 rounded-xl dark:placeholder-gray-400 dark:text-white  bg-primary-light dark:bg-primary-dark border border-muted-light dark:border-muted-dark focus:ring-accent-100 focus:border-accent-100 focus:dark:ring-accent-900 focus:dark:border-accent-900"
-          placeholder="Enter an Amount" />
-
-        <button
-          class="dark:text-white absolute end-2.5 bottom-1.5 focus:ring-1 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 border border-muted-light dark:border-muted-dark flex items-center justify-center gap-2">
-          MYR
-          <ng-icon name="heroChevronDownSolid" size="17"></ng-icon>
-        </button>
-      </div>
-    </div>
-  </div>
+  </form>
 
   <div
     class="bg-gradient-to-r from-accent-700 to-accent-600 px-6 md:px-8 py-6 flex items-center flex-col mt-5 rounded-xl">
     <h2 class="text-xl md:text-2xl font-bold text-white mb-2">
-      $1000.00 = €869.00
+      {{ currencyConverterConfig.baseCurrencyDetails.symbol }}1.000 =
+      {{ currencyConverterConfig.targetCurrencyDetails.symbol }}{{currencyConverterConfig.targetCurrencyRate | number :
+      '1.4-4'}}
     </h2>
 
     <p class="text-sm text-gray-700 dark:text-gray-300">
-      Last updated at 7:45:46 PM
+      Last updated at {{ currencyConverterConfig.lastUpdated | date: 'hh:mm:ss a' }}
     </p>
+  </div>
+</div>
+
+<div #currencySelectionModalEl tabindex="-1" aria-hidden="true"
+  class="fixed left-0 right-0 top-0 z-50 hidden h-[calc(100%-1rem)] max-h-full w-full overflow-y-auto overflow-x-hidden p-4 md:inset-0">
+  <div class="relative max-h-full w-full max-w-2xl">
+    <app-currency-selection-modal (onModalDismiss)="dismissModal($event.currencyCode)"></app-currency-selection-modal>
   </div>
 </div>
