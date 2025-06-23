@@ -13,3 +13,9 @@ export interface ILocalCurrencyData {
   code: string;
   name_plural: string;
 };
+
+export interface ICurrencyData {
+  code: string;
+  name: string;
+  symbol: string | null;
+};

@@ -1,28 +1,32 @@
 import { AsyncPipe, NgClass } from '@angular/common';
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import {
+  delay,
+  Observable,
+  switchMap
+} from 'rxjs';
 
 import { NgIcon } from '@ng-icons/core';
-import { ChartData, ChartDataset, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
+import { Store } from '@ngrx/store';
 
-interface IChart {
-  options: ChartOptions,
-  data: ChartData
-};
 
-import {
-  DefaultSelectedCurrencies,
-  PopularCurrencies
-} from '../../constants';
+import { GetCurrencyData } from '@src/app/constants';
 import { CurrencySelectionModalComponent } from '../';
 import { HistoricalDataService } from '@src/app/services';
-import { Observable, switchMap, tap } from 'rxjs';
-import { select, Store } from '@ngrx/store';
 import { SelectBaseCurrency } from '@src/app/stores/configs';
 import { THistoricalAggregationType } from '@src/app/types';
+import { CurrencyDetailsParserPipe } from '@src/app/shared';
+import { IChart } from '@src/app/interfaces';
 
 @Component({
   selector: 'app-historical-trends',
@@ -30,6 +34,7 @@ import { THistoricalAggregationType } from '@src/app/types';
     NgIcon,
     NgClass,
     AsyncPipe,
+    CurrencyDetailsParserPipe,
     BaseChartDirective,
     CurrencySelectionModalComponent
   ],
@@ -63,7 +68,7 @@ export class HistoricalTrendsComponent implements OnInit {
     }
   ];
   selectedHistory = this.historyOpts[0].value;
-  popularCurrencies = PopularCurrencies;
+  availableCurrencies = this.manageCurrencyList('IDR');
 
   ngOnInit(): void {
     this.getChartInstance();
@@ -77,6 +82,8 @@ export class HistoricalTrendsComponent implements OnInit {
 
   getChartInstance() {
     this.chart$ = this.store.select(SelectBaseCurrency).pipe(
+      // Delay by 1 second so when user make changes to the config it wont spam the API
+      delay(1000),
       switchMap(currency => this.historicalData.getChartData(currency, this.selectedCurrencies, this.selectedHistory))
     );
   };
@@ -107,7 +114,7 @@ export class HistoricalTrendsComponent implements OnInit {
   };
 
   handleSelectionCurrencies(currency: string) {
-    this.canAddCurrency = this.selectedCurrencies.length <= 3;
+    this.availableCurrencies = this.manageCurrencyList(currency.toUpperCase());
 
     const index = this.selectedCurrencies.indexOf(currency);
 
@@ -116,6 +123,8 @@ export class HistoricalTrendsComponent implements OnInit {
     } else {
       this.selectedCurrencies.push(currency);
     };
+
+    this.canAddCurrency = this.selectedCurrencies.length < 3;
 
     this.getChartInstance();
   };
@@ -126,5 +135,42 @@ export class HistoricalTrendsComponent implements OnInit {
     };
 
     this.currencySelectionModal!.hide();
+  };
+
+  manageCurrencyList(selectedCurrency: string | null = null) {
+    const defaultCurrencies = [
+      'USD',
+      'SGD',
+      'EUR',
+      'GBP',
+      'AUD',
+      'JPY',
+      'CNY',
+      'THB',
+    ];
+
+    let currentCurrencyList = [...defaultCurrencies];
+
+    if (selectedCurrency) {
+      const index = currentCurrencyList.indexOf(selectedCurrency);
+
+      if (index > -1) {
+        currentCurrencyList.splice(index, 1);
+      };
+    };
+
+    const allAvailableCurrencies = GetCurrencyData;
+
+    const filteredDefaultCurrencies = allAvailableCurrencies.filter((currency) =>
+      currentCurrencyList.includes(currency.code)
+    );
+
+    const otherCurrencies = allAvailableCurrencies.filter(
+      (currency) =>
+        !defaultCurrencies.includes(currency.code) &&
+        currency.code !== selectedCurrency
+    );
+
+    return [...filteredDefaultCurrencies, ...otherCurrencies].splice(0, 8);
   };
 };

@@ -1,20 +1,16 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnInit, output } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 
 import { NgIcon } from '@ng-icons/core';
 import { IFuseOptions } from 'fuse.js';
 
-import { ISupportedCurrencyResponse } from '@src/app/interfaces';
-import { ApiService } from '@src/app/services';
-import { CurrencySymbolConverterPipe, FusePipe } from '@src/app/shared';
+import { FusePipe } from '@src/app/shared';
+import { GetCurrencyData } from '@src/app/constants';
+import { ICurrencyData } from '@src/app/interfaces';
 
 @Component({
   selector: 'app-currency-selection-modal',
   imports: [
-    AsyncPipe,
-    CurrencySymbolConverterPipe,
     FormsModule,
     FusePipe,
     NgIcon
@@ -22,21 +18,16 @@ import { CurrencySymbolConverterPipe, FusePipe } from '@src/app/shared';
   templateUrl: './currency-selection-modal.component.html',
   styleUrl: './currency-selection-modal.component.scss'
 })
-export class CurrencySelectionModalComponent implements OnInit {
+export class CurrencySelectionModalComponent {
 
-  private api = inject(ApiService);
-  currencies$!: Observable<ISupportedCurrencyResponse[]>;
-  fuseOptions: IFuseOptions<ISupportedCurrencyResponse> = {
+  currencyData = GetCurrencyData;
+  fuseOptions: IFuseOptions<ICurrencyData> = {
     keys: ['name', 'code'],
     findAllMatches: true
   };
   searchTerm: string = '';
   skeleton = new Array(3);
   onModalDismiss = output<{ currencyCode: string | null; }>();
-
-  ngOnInit(): void {
-    this.currencies$ = this.api.getSupportedCurrency();
-  };
 
   onSelectData(currencyCode: string) {
     this.dismissModal(currencyCode);

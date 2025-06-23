@@ -5,4 +5,8 @@ export {
 export {
   PopularCurrencies,
   DefaultSelectedCurrencies
- } from './currencies';
+} from './currencies';
+export {
+  GetCurrencyData,
+  GetCurrencyDetails
+} from './currency-data';

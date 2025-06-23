@@ -16,11 +16,20 @@ import { NgIcon } from '@ng-icons/core';
 import { Store } from '@ngrx/store';
 import { IFuseOptions } from 'fuse.js';
 
-import { IExchangeRateData, IExchangeRateStateResponse } from '../../interfaces';
-import { CurrencySymbolConverterPipe, FusePipe } from '../../shared';
-import { ResponseMappingService } from '../../services/response-mapping.service';
-import { SelectBaseCurrency, SetBaseCurrency } from '../../stores/configs';
-import { SelectLastUpdated } from '../../stores/exchange-rate';
+import {
+  IExchangeRateStateResponse,
+  IExchangeRateData
+} from '@src/app/interfaces';
+import { ResponseMappingService } from '@src/app/services/response-mapping.service';
+import {
+  FusePipe,
+  CurrencyDetailsParserPipe
+} from '@src/app/shared';
+import {
+  SelectBaseCurrency,
+  SetBaseCurrency
+} from '@src/app/stores/configs';
+import { SelectLastUpdated } from '@src/app/stores/exchange-rate';
 
 @Component({
   selector: 'app-exchange-rate',
@@ -31,7 +40,7 @@ import { SelectLastUpdated } from '../../stores/exchange-rate';
     DatePipe,
     FusePipe,
     FormsModule,
-    CurrencySymbolConverterPipe
+    CurrencyDetailsParserPipe
   ],
   templateUrl: './exchange-rate.component.html',
   styleUrl: './exchange-rate.component.scss'

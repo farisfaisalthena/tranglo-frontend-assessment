@@ -13,15 +13,24 @@ import { NgIcon } from '@ng-icons/core';
 import { Store } from '@ngrx/store';
 
 import {
+  SummaryCardComponent,
   ExchangeRateComponent,
-  HistoricalTrendsComponent,
-  SummaryCardComponent
-} from '../../components';
-import { ConfigService } from '../../services';
-import { TimeAgoPipe } from '../../shared';
-import { RefreshExchangeRate, SelectLastRefreshed } from '../../stores/exchange-rate';
-import { SelectBaseCurrency, ToggleAutoRefresh } from '../../stores/configs';
-import { REFRESH_TIMER_IN_SECONDS } from '../../constants';
+
+  HistoricalTrendsComponent
+} from '@src/app/components';
+import {
+  GetCurrencyData,
+  REFRESH_TIMER_IN_SECONDS
+} from '@src/app/constants';
+import { TimeAgoPipe } from '@src/app/shared';
+import {
+  SelectBaseCurrency,
+  ToggleAutoRefresh
+} from '@src/app/stores/configs';
+import {
+  SelectLastRefreshed,
+  RefreshExchangeRate
+} from '@src/app/stores/exchange-rate';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,7 +48,6 @@ import { REFRESH_TIMER_IN_SECONDS } from '../../constants';
 })
 export class DashboardComponent implements OnInit {
 
-  private config = inject(ConfigService);
   private store = inject(Store);
   viewOpts = [
     {
@@ -63,6 +71,7 @@ export class DashboardComponent implements OnInit {
   baseCurrency$ = this.store.select(SelectBaseCurrency);
   lastExchangeRateRefresh$!: Observable<Date>;
   lastExchangeRateRefresh: Date | null = null;
+  totalCurrencies = GetCurrencyData.length.toString();
   // Refresh Timer Variables
   timerSubscription: Subscription | null = null;
   timerDurationLeft = REFRESH_TIMER_IN_SECONDS;
