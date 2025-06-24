@@ -8,7 +8,7 @@
     <div class="flex flex-wrap gap-2">
       @for (q of quickAmountOpts; track $index) {
       <button class="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-        [ngClass]="selectedAmount === q ? 'bg-blue-600 text-white shadow-lg transform scale-105' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'"
+        [ngClass]="selectedAmount === q ? 'bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300 transform scale-105' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 hover:scale-105'"
         (click)="onQuickAmountChange(q)">
         {{ q | number }}
       </button>
