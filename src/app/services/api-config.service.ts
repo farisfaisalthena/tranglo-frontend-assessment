@@ -15,6 +15,7 @@ import {
 
 import { ApiCachingService, ConfigService } from './';
 import { IHttpGetConfig, IHttpPostConfig } from '../interfaces';
+import { environment } from '@src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class ApiConfigService {
   private httpClient = inject(HttpClient);
   private apiCaching = inject(ApiCachingService);
   private config = inject(ConfigService);
-  private apiUrl: string = 'http://localhost:8080';
+  private apiUrl: string = environment.apiUrl;
 
   /**
    * GET: Request API with cache.
