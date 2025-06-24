@@ -30,6 +30,8 @@ import {
   SetBaseCurrency
 } from '@src/app/stores/configs';
 import { SelectLastUpdated } from '@src/app/stores/exchange-rate';
+import { ConfigService } from '@src/app/services';
+import { GetCurrencyDetails } from '@src/app/constants';
 
 @Component({
   selector: 'app-exchange-rate',
@@ -49,6 +51,7 @@ export class ExchangeRateComponent implements OnInit {
 
   private store = inject(Store);
   private responseMapping = inject(ResponseMappingService);
+  private config = inject(ConfigService)
   autoRefresh = input<boolean>(true);
   baseCurrency$ = this.store.select(SelectBaseCurrency);
   exchangeRates$!: Observable<IExchangeRateStateResponse>;
@@ -88,7 +91,11 @@ export class ExchangeRateComponent implements OnInit {
   };
 
   setCurrencyAsBase(currency: string) {
+    const currencyDetails = GetCurrencyDetails(currency);
+    const message: string = `Updated Base Currency to ${currency} - ${currencyDetails.name}`;
+
     this.store.dispatch(SetBaseCurrency({ currency }));
+    this.config.showToastMessage(message);
   };
 
   sortRates<K extends keyof IExchangeRateData>(items: IExchangeRateData[], key: K): IExchangeRateData[] {
