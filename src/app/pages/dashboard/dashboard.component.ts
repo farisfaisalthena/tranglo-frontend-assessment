@@ -32,6 +32,7 @@ import {
   SelectLastRefreshed,
   RefreshExchangeRate
 } from '@src/app/stores/exchange-rate';
+import { ConfigService } from '@src/app/services';
 
 @Component({
   selector: 'app-dashboard',
@@ -51,6 +52,7 @@ import {
 export class DashboardComponent implements OnInit {
 
   private store = inject(Store);
+  private config = inject(ConfigService);
   viewOpts = [
     {
       name: 'Exchange Rates',
@@ -77,6 +79,7 @@ export class DashboardComponent implements OnInit {
   lastExchangeRateRefresh$!: Observable<Date>;
   lastExchangeRateRefresh: Date | null = null;
   totalCurrencies = GetCurrencyData.length.toString();
+  manualRefreshCount: number = 0;
   // Refresh Timer Variables
   timerSubscription: Subscription | null = null;
   timerDurationLeft = REFRESH_TIMER_IN_SECONDS;
@@ -132,6 +135,13 @@ export class DashboardComponent implements OnInit {
   };
 
   manualRefresh() {
+    // Prevent API spam
+    if (this.manualRefreshCount >= 3) {
+      this.config.showToastMessage('Whoops! Looks like we\'re getting a lot of requests from you right now. Please give it a moment and try again!');
+      return;
+    };
+
+    this.manualRefreshCount += 1;
     this.store.dispatch(RefreshExchangeRate());
   };
 
