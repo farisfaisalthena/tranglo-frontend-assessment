@@ -1,10 +1,10 @@
 import { AsyncPipe, NgClass } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { Observable, of, tap } from 'rxjs';
 
 import { NgIcon } from '@ng-icons/core';
 
-import { ConfigService } from '../../services';
-import { Observable, of, tap } from 'rxjs';
+import { ConfigService } from '@src/app/services';
 
 @Component({
   selector: 'app-header',
@@ -31,18 +31,11 @@ export class HeaderComponent implements OnInit {
     this.handleThemeMode();
   };
 
-  // TODO: Fix implementation
   onThemeChange() {
     this.enableDarkMode = !this.enableDarkMode;
+    const isDarkMode = document.documentElement.classList.toggle('dark');
 
-    if (!this.enableDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('color-theme', 'dark');
-      return;
-    };
-
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('color-theme', 'light');
+    localStorage.setItem('color-theme', isDarkMode ? 'dark' : 'light');
   };
 
   handleThemeMode() {
