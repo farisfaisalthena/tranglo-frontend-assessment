@@ -6,7 +6,6 @@ import {
   IExchangeRateData,
   IExchangeRates,
   IFormattedExchangeRates,
-  IHistoricalData,
   IHistoricalExchangeRatePayload,
   IHistoricalExchangeRateResponse
 } from '../interfaces';
@@ -41,14 +40,5 @@ export class ApiService {
 
   getHistoricalExchangeRate(body: IHistoricalExchangeRatePayload) {
     return this.apiConfig.post<IHistoricalExchangeRateResponse>('/exchange-rate-history', { body });
-  };
-
-
-
-
-  getHistoricalData(baseCurrency: string, year: number, month: number, day: number) {
-    const endpoint: string = `/history/${baseCurrency}/${year}/${month}/${day}`;
-
-    return this.apiConfig.get<IHistoricalData>(endpoint, { force_refresh: false, cache_duration: 24 });
   };
 };

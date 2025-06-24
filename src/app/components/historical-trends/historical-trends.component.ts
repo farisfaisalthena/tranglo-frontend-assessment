@@ -19,17 +19,21 @@ import { Modal } from 'flowbite';
 import type { ModalOptions, ModalInterface } from 'flowbite';
 import type { InstanceOptions } from 'flowbite';
 import { Store } from '@ngrx/store';
+import { format } from 'date-fns';
+import { ChartData, ChartDataset } from 'chart.js';
 
 
 import { GetCurrencyData, GetCurrencyDetails } from '@src/app/constants';
 import { CurrencySelectionModalComponent } from '../';
-import { ApiService, HistoricalDataService } from '@src/app/services';
+import { ApiService } from '@src/app/services';
 import { SelectBaseCurrency } from '@src/app/stores/configs';
 import { THistoricalAggregationType } from '@src/app/types';
 import { CurrencyDetailsParserPipe } from '@src/app/shared';
-import { IChart, IHistoricalExchangeRatePayload, IHistoricalExchangeRateResponse } from '@src/app/interfaces';
-import { ChartData, ChartDataset } from 'chart.js';
-import { format } from 'date-fns';
+import {
+  IChart,
+  IHistoricalExchangeRatePayload,
+  IHistoricalExchangeRateResponse
+} from '@src/app/interfaces';
 import { getHistoricalDataChartOption } from './chart-option';
 
 @Component({
@@ -243,6 +247,6 @@ export class HistoricalTrendsComponent implements OnInit {
 
     console.log(datasets)
 
-    return { labels, datasets }
+    return { labels, datasets };
   };
 };

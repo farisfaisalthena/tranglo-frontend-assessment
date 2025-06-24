@@ -8,7 +8,6 @@ export {
   type IExchangeRateStateResponse
 } from './exchange-rate';
 export {
-  type IHistoricalData,
   type IChart,
   type IHistoricalExchangeRatePayload,
   type IHistoricalExchangeRateResponse,
