@@ -37,7 +37,7 @@
     <div class="flex flex-wrap gap-2 mb-4">
       @for (c of selectedCurrencies; track $index) {
       <div
-        class="flex items-center space-x-2 px-3 py-2 bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300 rounded-xl">
+        class="flex items-center space-x-2 px-3 py-2 bg-accent-100 dark:bg-accent-900 text-accent-700 dark:text-accent-300 rounded-lg">
         <div class="w-3 h-3 rounded-full" [ngClass]="getRandomColor($index)"></div>
         <span class="text-sm font-medium">
           {{ c }} - {{ c | currencyDetailsParser:'name' }}
@@ -53,16 +53,16 @@
 
     <div class="flex flex-wrap gap-2">
       @for (c of availableCurrencies; track $index) {
-      <button
-        class="px-3 py-2 rounded-xl text-sm transition-colors bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-600"
-        [disabled]="!canAddCurrency" [ngClass]="canAddCurrency ? 'cursor-pointer' : 'cursor-not-allowed'"
+      <button class="px-3 py-2 rounded-lg text-sm transition-colors" [disabled]="!canAddCurrency"
+        [ngClass]="canAddCurrency ? 'cursor-pointer bg-white dark:bg-gray-600 text-blue-600 dark:text-blue-400' : 'cursor-not-allowed bg-gray-50 dark:bg-gray-800 text-gray-400 dark:text-gray-600'"
         (click)="handleSelectionCurrencies(c.code)">
         {{ c.code }} - {{ c.name }}
       </button>
       }
       <button
-        class="px-3 py-2 rounded-lg text-sm border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 hover:border-blue-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1"
-        [disabled]="!canAddCurrency" [ngClass]="canAddCurrency ? 'cursor-pointer' : 'cursor-not-allowed'"
+        class="px-3 py-2 rounded-lg text-sm border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-400 transition-colors flex items-center gap-1"
+        [disabled]="!canAddCurrency"
+        [ngClass]="canAddCurrency ? 'cursor-pointer hover:border-blue-400 dark:hover:text-blue-400' : 'cursor-not-allowed'"
         (click)="openModal()">
         <ng-icon name="heroPlus"></ng-icon>
         More Currencies
