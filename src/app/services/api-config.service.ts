@@ -1,15 +1,20 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import {
   Observable,
   switchMap,
   from,
   tap,
-  of
+  of,
+  catchError,
+  timeout,
+  EMPTY,
+  NEVER,
+  throwError
 } from 'rxjs';
 
 import { ApiCachingService, ConfigService } from './';
-import { IHttpGetConfig } from '../interfaces';
+import { IHttpGetConfig, IHttpPostConfig } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -83,7 +88,59 @@ export class ApiConfigService {
     );
   };
 
+  /**
+   * POST: Simple request API.
+   *
+   * @param endpoint - <apiUrl><endpoint> for service
+   * @param options.body - request body (default: null)
+   * @param options.headers - http headers (default: {})
+   * @param options.params - additional request parameters (default: {})
+   * @param options.url - url of web service (default: apiUrl)
+   * @return data observable
+   */
+  post<T>(endpoint: string, options: IHttpPostConfig = {}): Observable<T> {
+    options = {
+      body: null,
+      headers: {},
+      params: {},
+      url: this.apiUrl,
+      ...options
+    };
+
+    const url = options.url + endpoint;
+    const opt = {
+      params: options.params,
+      headers: options.headers
+    };
+
+    return this.config.networkStatus$.pipe(
+      switchMap(status => {
+        if (!status) {
+          this.config.showToastMessage('Some of the date will not be accessible as you are not connected on an Internet.');
+          throw new Error('No internet connection');
+        };
+
+        return this.httpClient.post<T>(url, options.body, opt).pipe(
+          catchError(this.handleClientError),
+          timeout(10000)
+        );
+      })
+    );
+  };
+
   private convertHoursToSeconds(hours: number): number {
     return Math.round(hours * 3600);
+  };
+
+  /** Handle client error by rethrowing 4xx or return empty observable for 304. */
+  private handleClientError(err: HttpErrorResponse): Observable<never> {
+    if (400 <= err.status && err.status < 500) {
+      return throwError(() => err);
+    } else if (err.status === 304) {
+      return EMPTY;
+    } else {
+      console.error('Unknown http error response', err);
+      return NEVER;
+    };
   };
 };

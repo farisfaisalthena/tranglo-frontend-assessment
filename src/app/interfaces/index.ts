@@ -9,6 +9,12 @@ export {
 } from './exchange-rate';
 export {
   type IHistoricalData,
-  type IChart
+  type IChart,
+  type IHistoricalExchangeRatePayload,
+  type IHistoricalExchangeRateResponse,
+  type ICurrencyRateData
 } from './historical';
-export { type IHttpGetConfig } from './http-config';
+export {
+  type IHttpGetConfig,
+  type IHttpPostConfig
+} from './http-config';

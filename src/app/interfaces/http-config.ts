@@ -13,3 +13,10 @@ export interface IHttpGetConfig {
   force_refresh?: boolean;
   cache_duration?: number;
 };
+
+export interface IHttpPostConfig {
+  body?: any | null;
+  headers?: HttpHeaders | { [header: string]: string | string[] };
+  params?: HttpParams | { [param: string]: string | string[] };
+  url?: string;
+};

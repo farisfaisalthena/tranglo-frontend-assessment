@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import {
   delay,
+  map,
   Observable,
   switchMap
 } from 'rxjs';
@@ -20,13 +21,16 @@ import type { InstanceOptions } from 'flowbite';
 import { Store } from '@ngrx/store';
 
 
-import { GetCurrencyData } from '@src/app/constants';
+import { GetCurrencyData, GetCurrencyDetails } from '@src/app/constants';
 import { CurrencySelectionModalComponent } from '../';
-import { HistoricalDataService } from '@src/app/services';
+import { ApiService, HistoricalDataService } from '@src/app/services';
 import { SelectBaseCurrency } from '@src/app/stores/configs';
 import { THistoricalAggregationType } from '@src/app/types';
 import { CurrencyDetailsParserPipe } from '@src/app/shared';
-import { IChart } from '@src/app/interfaces';
+import { IChart, IHistoricalExchangeRatePayload, IHistoricalExchangeRateResponse } from '@src/app/interfaces';
+import { ChartData, ChartDataset } from 'chart.js';
+import { format } from 'date-fns';
+import { getHistoricalDataChartOption } from './chart-option';
 
 @Component({
   selector: 'app-historical-trends',
@@ -43,8 +47,8 @@ import { IChart } from '@src/app/interfaces';
 })
 export class HistoricalTrendsComponent implements OnInit {
 
-  private historicalData = inject(HistoricalDataService);
   private store = inject(Store);
+  private api = inject(ApiService);
   @ViewChild('currencySelectionModalEl', { static: false }) currencySelectionModalElRef!: ElementRef<HTMLInputElement>;
   currencySelectionModal: ModalInterface | null = null;
   chart$!: Observable<IChart>;
@@ -84,7 +88,17 @@ export class HistoricalTrendsComponent implements OnInit {
     this.chart$ = this.store.select(SelectBaseCurrency).pipe(
       // Delay by 1 second so when user make changes to the config it wont spam the API
       delay(1000),
-      switchMap(currency => this.historicalData.getChartData(currency, this.selectedCurrencies, this.selectedHistory))
+      switchMap(currency => {
+        const body: IHistoricalExchangeRatePayload = {
+          base_currency: currency,
+          currency_codes: this.selectedCurrencies,
+          interval: this.selectedHistory
+        };
+
+        return this.api.getHistoricalExchangeRate(body).pipe(
+          map(res => this.generateChart(res, currency))
+        );
+      })
     );
   };
 
@@ -172,5 +186,63 @@ export class HistoricalTrendsComponent implements OnInit {
     );
 
     return [...filteredDefaultCurrencies, ...otherCurrencies].splice(0, 8);
+  };
+
+  generateChart(chartData: IHistoricalExchangeRateResponse, currency: string): IChart {
+    const graphTitle = `Exchange Rate Trends: ${this.selectedCurrencies.join(', ')} vs ${currency}`;
+    const theme = localStorage.getItem('color-theme')?.toLowerCase() ?? 'light';
+
+    const options = getHistoricalDataChartOption(graphTitle, theme);
+    const data = this.formatChartData(chartData);
+
+    return {
+      options,
+      data
+    };
+  };
+
+  formatChartData(response: IHistoricalExchangeRateResponse): ChartData {
+    const currencies = Object.keys(response);
+    // Select random currency since its the same start and end date
+    const randomCurrency = response[currencies[0]];
+    // Format Label nicely
+    const labels: string[] = randomCurrency.map(d => format(d.time, 'dd MMMM'));
+    // Prepare Colors for Legends
+    const colors = [
+      'rgb(245, 158, 11)',
+      'rgb(139, 92, 246)',
+      'rgb(59, 130, 246)'
+    ];
+    const backgroundColors = [
+      'rgba(245, 158, 11, 0.2)',
+      'rgba(139, 92, 246, 0.2)',
+      'rgba(59, 130, 246, 0.2)',
+    ];
+
+    const datasets: ChartDataset[] = currencies.map((curr, index) => {
+      const color = colors[index];
+      const bgColor = backgroundColors[index];
+      const data = response[curr].map(r => r.rate);
+      const label = `${curr} - ${GetCurrencyDetails(curr).name}`;
+
+      return {
+        label,
+        data,
+        backgroundColor: bgColor,
+        borderColor: color,
+        borderWidth: 2,
+        fill: false,
+        pointBackgroundColor: color,
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointHoverRadius: 6,
+        pointRadius: 2,
+        tension: 0.4,
+      };
+    });
+
+    console.log(datasets)
+
+    return { labels, datasets }
   };
 };
