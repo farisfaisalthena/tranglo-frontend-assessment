@@ -1,5 +1,4 @@
 export { type IConfigState } from './config';
-export { type IConvertResponse } from './conversion';
 export { type ICurrencyData } from './currency';
 export {
   type IExchangeRates,

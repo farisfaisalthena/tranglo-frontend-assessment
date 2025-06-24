@@ -19,7 +19,7 @@ export class ApiConfigService {
   private httpClient = inject(HttpClient);
   private apiCaching = inject(ApiCachingService);
   private config = inject(ConfigService);
-  private apiUrl: string = 'https://v6.exchangerate-api.com/v6/55ce693059ff37e7094afada';
+  private apiUrl: string = 'http://localhost:8080';
 
   /**
    * GET: Request API with cache.
