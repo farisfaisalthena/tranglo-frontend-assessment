@@ -53,8 +53,14 @@
       (click)="selectedView = v.value">
       <ng-icon [name]="v.icon" size="20"></ng-icon>
 
-      <div>
+      <!-- Hide long name on small devices -->
+      <div class="hidden sm:block">
         {{ v.name }}
+      </div>
+
+      <!-- Show shorter name on small devices -->
+      <div class="sm:hidden">
+        {{ v.short_name }}
       </div>
     </button>
     }

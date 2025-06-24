@@ -54,16 +54,19 @@ export class DashboardComponent implements OnInit {
   viewOpts = [
     {
       name: 'Exchange Rates',
+      short_name: 'Rates',
       value: 'rates',
       icon: 'heroBanknotes'
     },
     {
       name: 'History Trends',
+      short_name: 'History',
       value: 'trends',
       icon: 'heroArrowTrendingUp'
     },
     {
       name: 'Currency Converter',
+      short_name: 'Converter',
       value: 'converter',
       icon: 'heroCalculator'
     }
